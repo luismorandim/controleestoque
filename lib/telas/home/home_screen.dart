@@ -5,38 +5,137 @@ import '../../padrao/cores.dart';
 import '../../padrao/tela_padrao.dart';
 import '../../padrao/card_padrao.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   String searchKeyword = '';
   bool showBelowMinimum = false;
 
-
   @override
   Widget build(BuildContext context) {
-
-    return Consumer <Product> (
+    return Consumer<Product>(
       builder: (__, product, _) {
+        final filteredProducts = product.products.where((produto) {
+          final matchesSearch = produto['name']
+              .toLowerCase()
+              .contains(searchKeyword.toLowerCase());
+          final matchesFilter =
+              !showBelowMinimum || produto['quantity'] < produto['minimum'];
+          return matchesSearch && matchesFilter;
+        }).toList();
+
         return TelaPadrao(
           hasLeadingButton: false,
           titulo: 'Controle de Estoque',
-          body: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: ListView.builder(
-              itemCount: product.products.length,
-              itemBuilder: (context, index) {
-                final produto = product.products[index];
-                final isBelowMinimum = produto['quantity'] < produto['minimum'];
+          body: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Expanded(
+                  child: TextField(
+                    decoration: InputDecoration(
+                      labelText: 'Pesquisar por nome',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      suffixIcon: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.search),
+                            onPressed: () {
+                            },
+                          ),
+                          if (searchKeyword.isNotEmpty)
+                            IconButton(
+                              icon: const Icon(Icons.close),
+                              onPressed: () {
+                                setState(() {
+                                  searchKeyword = '';
+                                });
+                              },
+                            ),
+                        ],
+                      ),
+                    ),
+                    onChanged: (value) {
+                      setState(() {
+                        searchKeyword = value;
+                      });
+                    },
+                  ),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          showBelowMinimum = false;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                        !showBelowMinimum ? Cores.primaryColor : Colors.grey,
+                      ),
+                      child: const Text('Todos'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        setState(() {
+                          showBelowMinimum = true;
+                        });
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor:
+                        showBelowMinimum ? Cores.primaryColor : Colors.grey,
+                      ),
+                      child: const Text('Abaixo do Mínimo'),
+                    ),
+                  ],
+                ),
+              ),
+              Expanded(
+                child: filteredProducts.isEmpty
+                    ? Center(
+                  child: Text(
+                    'Nenhum produto encontrado',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.grey[600],
+                    ),
+                  ),
+                )
+                    : ListView.builder(
+                  itemCount: filteredProducts.length,
+                  itemBuilder: (context, index) {
+                    final produto = filteredProducts[index];
+                    final isBelowMinimum =
+                        produto['quantity'] < produto['minimum'];
 
-                return CardPadrao(
-                  titulo: produto['name'],
-                  subtitulo: 'Quantidade: ${produto['quantity']} | Mínimo: ${produto['minimum']}',
-                  isBelowMinimum: isBelowMinimum,
-                  trailingIcon: isBelowMinimum ? Icons.warning : Icons.check_circle,
-                  onTap: () {
-                    _showEditDialog(context, produto, index);
+                    return CardPadrao(
+                      titulo: produto['name'],
+                      subtitulo:
+                      'Quantidade: ${produto['quantity']} | Mínimo: ${produto['minimum']}',
+                      isBelowMinimum: isBelowMinimum,
+                      trailingIcon: isBelowMinimum
+                          ? Icons.warning
+                          : Icons.check_circle,
+                      onTap: () {
+                        _showEditDialog(context, produto, index);
+                      },
+                    );
                   },
-                );
-              },
-            ),
+                ),
+              ),
+            ],
           ),
           floatingButton: false,
         );
@@ -76,25 +175,18 @@ class HomeScreen extends StatelessWidget {
                   children: [
                     TextFormField(
                       controller: nameController,
-                      decoration: const InputDecoration(
-                        labelText: 'Nome do Produto',
-                        errorStyle: TextStyle(color: Colors.redAccent),
-                      ),
+                      decoration: const InputDecoration(labelText: 'Nome do Produto'),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'O nome não pode estar vazio.';
                         }
                         return null;
                       },
-                      autofocus: true,
                     ),
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: quantityController,
-                      decoration: const InputDecoration(
-                        labelText: 'Quantidade',
-                        errorStyle: TextStyle(color: Colors.redAccent),
-                      ),
+                      decoration: const InputDecoration(labelText: 'Quantidade'),
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -110,10 +202,7 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 10),
                     TextFormField(
                       controller: minimumController,
-                      decoration: const InputDecoration(
-                        labelText: 'Mínimo Permitido',
-                        errorStyle: TextStyle(color: Colors.redAccent),
-                      ),
+                      decoration: const InputDecoration(labelText: 'Mínimo Permitido'),
                       keyboardType: TextInputType.number,
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -133,12 +222,6 @@ class HomeScreen extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     Navigator.of(ctx).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Edição cancelada.'),
-                        backgroundColor: Colors.grey,
-                      ),
-                    );
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.grey,
@@ -157,26 +240,12 @@ class HomeScreen extends StatelessWidget {
                     produto.updateProduct(index, updatedProduct);
 
                     Navigator.of(ctx).pop();
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: const Text('Produto atualizado com sucesso!'),
-                        backgroundColor: Colors.green,
-                        duration: const Duration(seconds: 3),
-                        action: SnackBarAction(
-                          label: 'Desfazer',
-                          textColor: Colors.white,
-                          onPressed: () {
-                            produto.updateProduct(index, product);
-                          },
-                        ),
-                      ),
-                    );
                   }
                       : null,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isFormValid ? Cores.primaryColor : Colors.grey,
                   ),
-                  child: const Text('Salvar', style: TextStyle(color: Colors.white)),
+                  child: const Text('Salvar'),
                 ),
               ],
             );
