@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Product with ChangeNotifier {
-  List<Map<String, dynamic>> _products = [
+  final List<Map<String, dynamic>> _products = [
     {'name': 'Produto A', 'quantity': 5, 'minimum': 10},
     {'name': 'Produto B', 'quantity': 7, 'minimum': 10},
     {'name': 'Produto C', 'quantity': 3, 'minimum': 10},

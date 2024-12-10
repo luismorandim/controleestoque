@@ -9,13 +9,13 @@ class CardPadrao extends StatelessWidget {
   final VoidCallback? onTap;
 
   const CardPadrao({
-    Key? key,
+    super.key,
     required this.titulo,
     required this.subtitulo,
     required this.isBelowMinimum,
     required this.trailingIcon,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
