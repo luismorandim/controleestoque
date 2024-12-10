@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'cores.dart';
 
 class TelaPadrao extends StatelessWidget {
@@ -8,6 +7,7 @@ class TelaPadrao extends StatelessWidget {
   final bool floatingButton;
   final VoidCallback? onFloatingButtonPressed;
   final bool hasLeadingButton;
+  final IconData? floatingButtonIcon;
 
   const TelaPadrao({
     Key? key,
@@ -16,6 +16,7 @@ class TelaPadrao extends StatelessWidget {
     this.floatingButton = false,
     this.onFloatingButtonPressed,
     this.hasLeadingButton = true,
+    this.floatingButtonIcon,
   }) : super(key: key);
 
   @override
@@ -24,7 +25,7 @@ class TelaPadrao extends StatelessWidget {
       appBar: AppBar(
         leading: hasLeadingButton
             ? IconButton(
-          icon:  Icon(
+          icon: Icon(
             Icons.arrow_back,
             color: Cores.appBarFont,
           ),
@@ -36,7 +37,7 @@ class TelaPadrao extends StatelessWidget {
         backgroundColor: Cores.primaryColor,
         title: Text(
           titulo,
-          style:  TextStyle(
+          style: TextStyle(
             fontWeight: FontWeight.bold,
             color: Cores.appBarFont,
           ),
@@ -47,7 +48,10 @@ class TelaPadrao extends StatelessWidget {
           ? FloatingActionButton(
         backgroundColor: Cores.accentColor,
         onPressed: onFloatingButtonPressed,
-        child: Icon(Icons.add, color: Cores.appBarFont),
+        child: Icon(
+          floatingButtonIcon ?? Icons.add,
+          color: Cores.appBarFont,
+        ),
       )
           : null,
     );

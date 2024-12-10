@@ -4,6 +4,7 @@ import '../../model/Product.dart';
 import '../../padrao/cores.dart';
 import '../../padrao/tela_padrao.dart';
 import '../../padrao/card_padrao.dart';
+import '../qrCode/qr_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -34,39 +35,37 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Expanded(
-                  child: TextField(
-                    decoration: InputDecoration(
-                      labelText: 'Pesquisar por nome',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      suffixIcon: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
+                child: TextField(
+                  decoration: InputDecoration(
+                    labelText: 'Pesquisar por nome',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    suffixIcon: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.search),
+                          onPressed: () {
+                          },
+                        ),
+                        if (searchKeyword.isNotEmpty)
                           IconButton(
-                            icon: const Icon(Icons.search),
+                            icon: const Icon(Icons.close),
                             onPressed: () {
+                              setState(() {
+                                searchKeyword = '';
+                              });
                             },
                           ),
-                          if (searchKeyword.isNotEmpty)
-                            IconButton(
-                              icon: const Icon(Icons.close),
-                              onPressed: () {
-                                setState(() {
-                                  searchKeyword = '';
-                                });
-                              },
-                            ),
-                        ],
-                      ),
+                      ],
                     ),
-                    onChanged: (value) {
-                      setState(() {
-                        searchKeyword = value;
-                      });
-                    },
                   ),
+                  onChanged: (value) {
+                    setState(() {
+                      searchKeyword = value;
+                    });
+                  },
                 ),
               ),
               Padding(
@@ -137,7 +136,20 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          floatingButton: false,
+          floatingButton: true,
+          floatingButtonIcon: Icons.qr_code_scanner,
+        onFloatingButtonPressed: () async {
+        final scannedData = await Navigator.of(context).push(
+        MaterialPageRoute(
+        builder: (context) => const QRCodeScreen(),
+        ),
+        );
+
+        if (scannedData != null) {
+        setState(() {});
+        }
+
+            },
         );
       },
     );

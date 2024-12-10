@@ -11,6 +11,19 @@ class Product with ChangeNotifier {
 
   List<Map<String, dynamic>> get products => _products;
 
+  void addProduct(Map<String, dynamic> product) {
+    _products.add(product);
+    notifyListeners();
+  }
+
+  void updateQuantity(String name, int newQuantity) {
+    final index = _products.indexWhere((product) => product['name'] == name);
+    if (index != -1) {
+      _products[index]['quantity'] = newQuantity;
+      notifyListeners();
+    }
+  }
+
   void updateProduct(int index, Map<String, dynamic> updatedProduct) {
     _products[index] = updatedProduct;
     notifyListeners();
