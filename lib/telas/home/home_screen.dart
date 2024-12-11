@@ -1,6 +1,7 @@
 import 'package:controleestoque/model/login_manager.dart';
 import 'package:controleestoque/padrao/cores.dart';
 import 'package:controleestoque/padrao/tela_padrao.dart';
+import 'package:controleestoque/telas/home/home_screen.i18n.dart';
 import 'package:flutter/material.dart';
 import 'package:controleestoque/telas/produtos/produtos_screen.dart';
 import 'package:controleestoque/telas/graficos/chart_screen.dart';
@@ -19,7 +20,7 @@ class HomeScreen extends StatelessWidget {
 
         return TelaPadrao(
           hasLeadingButton: false,
-          titulo: 'Dashboard',
+          titulo: 'Dashboard'.i18n,
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
@@ -30,7 +31,7 @@ class HomeScreen extends StatelessWidget {
                     const Icon(Icons.person, size: 28),
                     const SizedBox(width: 8),
                     Text(
-                      'Olá, ${user?['name'] ?? ''}',
+                      'Olá,'.i18n + ' ${user?['name']}',
                       style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
@@ -47,7 +48,7 @@ class HomeScreen extends StatelessWidget {
                     _buildDashboardCard(
                       context,
                       icon: Icons.inventory,
-                      title: 'Produtos',
+                      title: 'Produtos'.i18n,
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(
@@ -59,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                     _buildDashboardCard(
                       context,
                       icon: Icons.bar_chart,
-                      title: 'Gráficos',
+                      title: 'Gráficos'.i18n,
                       onTap: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(

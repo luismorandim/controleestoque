@@ -1,6 +1,8 @@
+import 'package:controleestoque/model/language_manager.dart';
 import 'package:controleestoque/model/login_manager.dart';
 import 'package:controleestoque/padrao/theme.dart';
 import 'package:controleestoque/telas/home/home_screen.dart';
+import 'package:controleestoque/telas/login/login_screen.i18n.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:country_icons/country_icons.dart';
@@ -21,8 +23,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer2<ThemeManager, LoginManager>(
-      builder: (__, themeManager, loginManager, _) {
+    return Consumer3<ThemeManager, LoginManager, LanguageManager>(
+      builder: (__, themeManager, loginManager, languageManager, _) {
         return Scaffold(
           appBar: AppBar(
             title: const Text('Login'),
@@ -51,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   controller: _usernameController,
                   style: TextStyle(color: Cores.textColor(context)),
                   decoration: InputDecoration(
-                    labelText: 'Usuário',
+                    labelText: 'Usuário'.i18n,
                     labelStyle: TextStyle(color: Cores.textSubtitleColor(context)),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Cores.loginFieldBorder),
@@ -68,7 +70,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   obscureText: !_isPasswordVisible,
                   style: TextStyle(color: Cores.textColor(context)),
                   decoration: InputDecoration(
-                    labelText: 'Senha',
+                    labelText: 'Senha'.i18n,
                     labelStyle: TextStyle(color: Cores.textSubtitleColor(context)),
                     border: OutlineInputBorder(
                       borderSide: BorderSide(color: Cores.loginFieldBorder),
@@ -128,6 +130,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     onChanged: (value) {
                       setState(() {
                         _selectedLanguage = value!;
+                        languageManager.changeLanguage(value);
                       });
                     },
                     isExpanded: true,
@@ -147,14 +150,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                     } else {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Usuário ou senha inválidos', style: TextStyle(color: Colors.white)),
+                         SnackBar(
+                          content: Text('Usuário ou senha inválidos'.i18n, style: TextStyle(color: Colors.white)),
                           backgroundColor: Colors.red,
                         ),
                       );
                     }
                   },
-                  child: const Text('Entrar'),
+                  child:  Text('Entrar'.i18n),
                 ),
               ],
             ),

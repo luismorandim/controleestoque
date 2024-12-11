@@ -1,10 +1,13 @@
 import 'package:controleestoque/model/Product.dart';
 import 'package:controleestoque/model/login_manager.dart';
 import 'package:controleestoque/padrao/theme.dart';
-import 'package:controleestoque/telas/home/home_screen.dart';
 import 'package:controleestoque/telas/login/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:i18n_extension/i18n_extension.dart';
 import 'package:provider/provider.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+
+import 'model/language_manager.dart';
 
 void main() {
   runApp(
@@ -13,7 +16,7 @@ void main() {
         ChangeNotifierProvider(create: (_) => Product()),
         ChangeNotifierProvider(create: (_) => ThemeManager()),
         ChangeNotifierProvider(create: (_) => LoginManager()),
-
+        ChangeNotifierProvider(create: (_) => LanguageManager()),
       ],
       child: const MyApp(),
     ),
@@ -29,6 +32,15 @@ class MyApp extends StatelessWidget {
 
 
     return MaterialApp(
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('pt', 'BR'),
+        const Locale('en', 'US'),
+      ],
       debugShowCheckedModeBanner: false,
       title: 'Estoque',
       theme: ThemeData(
@@ -46,7 +58,9 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       themeMode: themeManager.currentTheme,
-      home:  LoginScreen(),
+      home: I18n(
+        initialLocale: const Locale('pt', 'BR'),
+          child: LoginScreen()),
     );
   }
 }
