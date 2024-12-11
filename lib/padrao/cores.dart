@@ -11,19 +11,16 @@ class Cores {
   static Color alertStatus = const Color.fromARGB(255, 244, 67, 54);
   static Color borderPadrao = const Color.fromARGB(255, 0, 0, 0);
 
-
   static const Color buttonActive = Color(0xFF6200EE);
   static const Color buttonInactive = Color(0xFFBDBDBD);
   static const Color textButtonActive = Colors.white;
   static const Color textButtonInactive = Colors.black54;
 
-  // Cor padrão para cards (preto acinzentado)
   static Color cardBackgroundColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
-    ? const Color.fromARGB(255, 40, 40, 40)
-    : const Color.fromARGB(255, 245, 245, 245);
+        ? const Color.fromARGB(255, 40, 40, 40)
+        : const Color.fromARGB(255, 245, 245, 245);
   }
-
 
   // Cores específicas dos gráficos
   static Color chartLineColor = const Color.fromARGB(255, 89, 89, 171);
@@ -33,19 +30,20 @@ class Cores {
   static Color chartPieRed = const Color.fromARGB(255, 244, 67, 54);
   static Color tooltipBackground = const Color.fromARGB(255, 50, 50, 50);
 
+  // Campos de login
+  static Color loginFieldBackground = const Color.fromARGB(255, 240, 240, 240);
+  static Color loginFieldBorder = const Color.fromARGB(255, 200, 200, 200);
 
-
+  // Texto
   static Color textColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
-        ? const Color.fromARGB(255, 245, 245, 245) // Texto claro
-        : const Color.fromARGB(255, 40, 40, 40); // Texto escuro
+        ? const Color.fromARGB(255, 245, 245, 245)
+        : const Color.fromARGB(255, 40, 40, 40);
   }
 
   static Color textSubtitleColor(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
-        ? const Color.fromARGB(255, 200, 200, 200) // Subtítulo claro
-        : const Color.fromARGB(255, 80, 80, 80); // Subtítulo escuro
+        ? const Color.fromARGB(255, 200, 200, 200)
+        : const Color.fromARGB(255, 80, 80, 80);
   }
-
-
 }

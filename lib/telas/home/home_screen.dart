@@ -1,3 +1,4 @@
+import 'package:controleestoque/model/login_manager.dart';
 import 'package:controleestoque/padrao/cores.dart';
 import 'package:controleestoque/padrao/tela_padrao.dart';
 import 'package:flutter/material.dart';
@@ -12,41 +13,62 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Consumer<Product>(
-      builder: (__, product, _) {
+    return Consumer2<Product, LoginManager>(
+      builder: (__, product, loginManager, _) {
+        final user = loginManager.loggedInUser;
+
         return TelaPadrao(
           hasLeadingButton: false,
           titulo: 'Dashboard',
           body: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Wrap(
-              spacing: 16.0,
-              runSpacing: 16.0,
-              alignment: WrapAlignment.center,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildDashboardCard(
-                  context,
-                  icon: Icons.inventory,
-                  title: 'Produtos',
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => const ProdutosScreen(),
+                Row(
+                  children: [
+                    const Icon(Icons.person, size: 28),
+                    const SizedBox(width: 8),
+                    Text(
+                      'Olá, ${user?['name'] ?? ''}',
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
-                    );
-                  },
+                    ),
+                  ],
                 ),
-                _buildDashboardCard(
-                  context,
-                  icon: Icons.bar_chart,
-                  title: 'Gráficos',
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (context) => ChartScreen(products: product.products),
-                      ),
-                    );
-                  },
+                const SizedBox(height: 16),
+                Wrap(
+                  spacing: 16.0,
+                  runSpacing: 16.0,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    _buildDashboardCard(
+                      context,
+                      icon: Icons.inventory,
+                      title: 'Produtos',
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => const ProdutosScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                    _buildDashboardCard(
+                      context,
+                      icon: Icons.bar_chart,
+                      title: 'Gráficos',
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ChartScreen(products: product.products),
+                          ),
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),

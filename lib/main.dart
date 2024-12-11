@@ -1,6 +1,8 @@
 import 'package:controleestoque/model/Product.dart';
+import 'package:controleestoque/model/login_manager.dart';
 import 'package:controleestoque/padrao/theme.dart';
 import 'package:controleestoque/telas/home/home_screen.dart';
+import 'package:controleestoque/telas/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -10,6 +12,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => Product()),
         ChangeNotifierProvider(create: (_) => ThemeManager()),
+        ChangeNotifierProvider(create: (_) => LoginManager()),
 
       ],
       child: const MyApp(),
@@ -43,7 +46,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       themeMode: themeManager.currentTheme,
-      home: const HomeScreen(),
+      home:  LoginScreen(),
     );
   }
 }
